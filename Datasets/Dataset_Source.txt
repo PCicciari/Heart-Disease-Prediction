@@ -1,0 +1,5 @@
+https://figshare.com/articles/dataset/Heart_Disease_Data_Set/19322552?file=34906647
+source for processed dataset
+
+https://www.kaggle.com/datasets/mexwell/heart-disease-dataset/data?select=heart_statlog_cleveland_hungary_final.csv
+source for heart_statlog_cleveland_hungary_final dataset
