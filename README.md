@@ -1,33 +1,44 @@
 # machine-learning
-This repository conatins python code and its associated dataset needed to generate a decision tree model and other ensemble models.<br/>
-In order for program to work, you may need to change the file path of the "pd.read_csv" line on each program.<br/> 
-## DecisionTree.py
-***DecisionTree.py is currently prone to overfitting; Testing accuracy is lower than validation accuracy.***<br/>
-DecisionTree.py is a program that utilizes only one decision tree. It first creates a basic model with some parameters:<br/><br/>
-    max_depth=3: The total depth of the decision tree<br/>
-    min_samples_split=5: The minimum number of samples per node split<br/>
-    min_samples_leaf=1: The minimum number of samples per leaf/termination node<br/>
-    random_state = rng: Used to reproduce results through program reruns<br/><br/>
-After the decision tree model is made, the model is then fit into a training set, split beforehand from the original dataset<br/>
-The spliiting of the original dataset is:<br/>
-    trainProportionPercent = .75: training dataset is 75% of total data<br/>
-    validateProportionPercent =.10: validation dataset is 10% of total data<br/>
-    testProportionPercent = .15: test dataset is 15% of total data<br/>
-The model is then validated with the validation dataset, with its respective confusion matrix.<br/>
-After determining the validation accuracy of the decision model, we hypertune the decision tree's parameters with a process known as Randon Search<br/>
-Random Search "searches" for the most optimal decision tree based on the parameters you can change on creation. This includes the ones stated above.<br/>
-After finding the most optimal parameters the decision tree is rebuilt, and tested with the test set.<br/>
+This repository contains Python code and its associated dataset for predicting heart disease using Decision Tree and various ensemble machine learning models.<br/>
 
+## DecisionTree.py
+DecisionTree.py can be prone to overfitting; testing accuracy may be lower than validation accuracy.<br/>
+This program trains a single Decision Tree classifier with parameters such as:<br/><br/>
+    max_depth=3: Maximum depth of the decision tree<br/>
+    min_samples_split=5: Minimum number of samples required to split a node<br/>
+    min_samples_leaf=1: Minimum number of samples required at a leaf node<br/>
+    random_state=rng: Ensures reproducible results across runs<br/><br/>
+The dataset is split into:<br/>
+    70% training data<br/>
+    20% validation data<br/>
+    10% test data<br/>
+After initial training and validation (including confusion matrix evaluation), the model is tuned using RandomizedSearchCV to find optimal hyperparameters before final testing.<br/>
   
 ## RandomForest.py
-RandomForest.py is a program that utilizes the Random Forest bagging ensemble technique, which is the use of multiple decision trees to predict an outcome<br/>
-In this program a randome forest is created with the followjng properties/parameters:<br/>
-    n_estimators=100: determines how many decision trees are in the "forest"<br/>
-    max_features='sqrt': determines how many maximum features are used in each decision tree<br/>
-    criterion='gini': determines the method of information gain<br/>
-    bootstrap=True: also known as bootstrap aggregation, determines if decision trees can retrieve instances of a dataset WITH replacement<br/>
-The same procedure applies here as in the normal DecisionTree.py method: test the model, evaluate its performance on the validation set, hypertune its parameters as necessary, and test the new model with the new parameters. In the current build of RandomForest.py, no parameters were changed; the validation accuracy and testing accuracy are both similar: each gain a prediction score of approx. 98%. 
+Uses the Random Forest ensemble method — multiple decision trees aggregated to improve accuracy.<br/>
+Key parameters include:<br/>
+    n_estimators=100: Number of trees in the forest<br/>
+    max_features='sqrt': Number of features considered for each split<br/>
+    criterion='gini': Split quality metric<br/>
+    bootstrap=True: Sampling with replacement for each tree<br/>
+The same train/validate/test process is followed. In current testing, Random Forest achieved ~98% prediction accuracy on both validation and test sets.<br/> 
 
+## ExtraTrees.py
+Implements the Extremely Randomized Trees (ExtraTrees) ensemble method. Similar to Random Forest, but splits are chosen more randomly, often improving variance reduction and training speed. Evaluated using the same data split and metrics.<br/>
 
-In progress: creating multiple ensemble models to evaluaate each respective model's accuracy. 
-Possible ensemble methods: ~~Random Forest~~, AdaBosst/GradientBoost, ExtraTrees etc.
+## AdaBoost.py
+Applies the AdaBoost ensemble boosting method, sequentially training weak learners (Decision Trees) and adjusting weights to focus on misclassified examples. Tuned using RandomizedSearchCV for maximum performance. In testing, AdaBoost achieved the highest overall accuracy and ROC-AUC score among all models.<br/>
+
+## Stacking.py & StackingDT.py
+Implements stacking ensemble learning — combining predictions from multiple base models (e.g., Decision Tree, Random Forest, Extra Trees, AdaBoost) to feed into a meta-model for final prediction. The StackingDT.py version uses Decision Trees as base estimators.<br/>
+
+## CleaningData.py
+Handles all dataset preparation steps:<br/>
+    • Removal of duplicate rows<br/>
+    • Splitting into training, validation, and test sets<br/>
+    • Balancing classes via RandomUnderSampler to address class imbalance<br/>
+
+## Summary of Results
+Ensemble methods (AdaBoost, Random Forest, Extra Trees) consistently outperformed single Decision Trees.<br/>
+Class balancing significantly improved recall, which is crucial in medical prediction.<br/>
+AdaBoost (tuned) achieved the best results with a percision of 97.9%, recall of 90%, and Accuracy of 92.3% and a good ROC-AUC score on the test dataset.<br/>
